@@ -1,0 +1,47 @@
+.memes-list__container {
+  max-width: 762px;
+  margin: auto;
+  display: table;
+}
+.memes-list__item {
+  min-height: 400px;
+  min-width: 400px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 1rem;
+  padding: 0.4rem;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.315);
+  width: fit-content;
+  @media screen and (max-width: 512px) {
+    min-height: 280px;
+    min-width: 280px;
+  }
+  img {
+    height: auto;
+    width: 100%;
+    max-width: 400px;
+    opacity: 0;
+    transition: all 0.7s;
+    cursor: pointer;
+  }
+}
+.up-button {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  right: 50px;
+  bottom: 50px;
+}
+.remove-meme {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  border-radius: 50%;
+  padding: 5px 8px;
+  font-size: 1rem;
+}

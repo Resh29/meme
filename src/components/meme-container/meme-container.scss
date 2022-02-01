@@ -1,0 +1,36 @@
+.meme-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 720px;
+  height: 640px;
+  margin: auto;
+  // padding-top: 2rem;
+  &__container {
+    display: flex;
+    justify-content: flex-end;
+  }
+  &__title {
+    text-align: center;
+  }
+  &__image {
+    min-width: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding: 2rem;
+    img {
+      margin: auto;
+      max-height: 480px;
+      max-width: 100%;
+      cursor: pointer;
+    }
+  }
+  .action-button {
+    display: flex;
+    justify-content: space-around;
+    // margin-top: 2rem;
+    margin-top: auto;
+  }
+}

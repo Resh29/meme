@@ -1,0 +1,10 @@
+@import './colors.scss';
+
+body {
+  background-image: url('./assets/hip-square.png');
+}
+#app {
+  min-height: 100vh;
+  color: $font-color-dark;
+  font-family: 'Roboto', sans-serif;
+}
