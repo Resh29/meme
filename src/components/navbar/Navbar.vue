@@ -48,7 +48,7 @@ export default {
   }),
   methods: {
     logOut() {
-      this.$store.dispatch('logOut');
+      this.$store.dispatch('userStore/logOut');
       this.isOpen = false;
     },
   },

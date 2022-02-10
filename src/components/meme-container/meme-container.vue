@@ -56,29 +56,45 @@ export default {
       return state.memes.loading;
     },
     meme: (state) => state.memes.currentMeme,
+    userId: (state) => state.userStore.user.id,
   }),
   methods: {
     loadNext() {
       this.$emit('nextMeme');
     },
-    saveMeme() {
-      const memes = JSON.parse(localStorage.getItem('saved-memes')) || [];
-      const id = Date.now();
-      if (memes.find((meme) => this.meme.url === meme.url)) {
-        this.$store.dispatch('pushMessage', {
-          type: 'ERROR',
-          action: 'ADD',
-          id: Date.now(),
+    async saveMeme() {
+      try {
+        const meme = {
+          url: this.meme.url,
+          id: Date.now().toString(),
+          title: this.meme.title,
+          author: this.meme.author,
+          postLink: this.meme.postLink,
+        };
+        await this.$store.dispatch('userStore/saveMeme', {
+          id: this.userId,
+          meme,
         });
-      } else {
-        memes.push({ url: this.meme.url, postLink: this.meme.postLink, id });
-        localStorage.setItem('saved-memes', JSON.stringify(memes));
-        this.$store.dispatch('pushMessage', {
-          type: 'SUCCESS',
-          action: 'ADD',
-          id: Date.now(),
-        });
+      } catch (error) {
+        throw new Error(error);
       }
+      // const memes = JSON.parse(localStorage.getItem('saved-memes')) || [];
+      // const id = Date.now();
+      // if (memes.find((meme) => this.meme.url === meme.url)) {
+      //   this.$store.dispatch('pushMessage', {
+      //     type: 'ERROR',
+      //     action: 'ADD',
+      //     id: Date.now(),
+      //   });
+      // } else {
+      //   memes.push({ url: this.meme.url, postLink: this.meme.postLink, id });
+      //   localStorage.setItem('saved-memes', JSON.stringify(memes));
+      //   this.$store.dispatch('pushMessage', {
+      //     type: 'SUCCESS',
+      //     action: 'ADD',
+      //     id: Date.now(),
+      //   });
+      // }
     },
   },
 };

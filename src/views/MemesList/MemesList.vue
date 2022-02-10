@@ -35,7 +35,6 @@ export default {
   components: { modal, FSModal },
   data() {
     return {
-      memes: [],
       modalText: 'Are you sure you want to remove this meme from your collection? :(',
       options: {
         root: null,
@@ -50,13 +49,26 @@ export default {
   },
   computed: mapState({
     user: (state) => state.userStore.user,
+    memes: (state) => state.memes.memes,
   }),
-  mounted() {
-    this.memes =
-      this.user?.memes || JSON.parse(localStorage.getItem('saved-memes')) || [];
+  async mounted() {
+    if (this.user) {
+      this.memes = await this.$store.dispatch('getUserMemesCollection', this.user.id);
+    }
+  },
+  watch: {
+    async user() {
+      await this.getMemes();
+    },
   },
   methods: {
+    async getMemes() {
+      if (this.user) {
+        this.memes = await this.$store.dispatch('getUserMemesCollection', this.user.id);
+      }
+    },
     // fullscreen modal action
+
     setCurrentMemeAndOpenFSModal(meme) {
       this.meme = meme;
       this.fsModalOpenState = true;
@@ -82,10 +94,12 @@ export default {
       }
     },
     // delete meme, if answer is 'true' ¯\_(ツ)_/¯
-    deleteMeme(meme) {
+    async deleteMeme(meme) {
       try {
-        this.memes = this.memes.filter((item) => item.id !== meme.id);
-        localStorage.setItem('saved-memes', JSON.stringify(this.memes));
+        await this.$store.dispatch('deleteMemeFromCollection', {
+          id: this.user.id,
+          memeId: meme.id,
+        });
         this.$store.dispatch('pushMessage', {
           type: 'SUCCESS',
           action: 'REMOVE',

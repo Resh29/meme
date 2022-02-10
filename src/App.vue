@@ -14,10 +14,22 @@ export default {
   name: 'App',
   components: { Navbar, Message },
   data() {
-    return {};
+    return {
+      token: '',
+    };
   },
-  mounted() {
-    this.$store.dispatch('getUser', this.getUserToken());
+
+  async mounted() {
+    this.token = this.getUserToken();
+    if (this.token)
+      await this.$store.dispatch(
+        'userStore/getUser',
+        {
+          payload: null,
+          token: this.token,
+        },
+        { root: true }
+      );
   },
   methods: {
     getUserToken() {

@@ -5,4 +5,6 @@ export const messages = {
   'REMOVE/SUCCESS': 'Meme has been removed!',
   'LOGIN/SUCCESS': 'Welcome ept',
   'LOGIN/ERROR': 'Something went wrong!',
+  'REGISTRATION/SUCCESS': 'REgistration success!',
+  'REGISTRATION/ERROR': 'Something went wrong',
 };

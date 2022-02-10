@@ -8,10 +8,10 @@
         class="auth-page__form login"
       >
         <div class="auth-page__form-container">
-          <input type="email" class="auth-page__form-input" />
+          <input type="email" class="auth-page__form-input" v-model="loginEmail" />
         </div>
         <div class="auth-page__form-container">
-          <input type="password" class="auth-page__form-input" />
+          <input type="password" class="auth-page__form-input" v-model="loginPassword" />
         </div>
         <div class="auth-page__form-buttons">
           <button type="submit" class="auth-page__btn btn primary">Login</button>
@@ -20,18 +20,26 @@
           </button>
         </div>
       </form>
-      <form v-else action="" class="auth-page__form registration">
+      <form
+        v-else
+        v-on:submit.prevent="registration"
+        class="auth-page__form registration"
+      >
         <div class="auth-page__form-container">
-          <input type="email" class="auth-page__form-input" />
+          <input type="email" class="auth-page__form-input" v-model="email" />
         </div>
         <div class="auth-page__form-container">
-          <input type="password" class="auth-page__form-input" />
+          <input type="password" class="auth-page__form-input" v-model.trim="password" />
         </div>
         <div class="auth-page__form-container">
-          <input type="password" class="auth-page__form-input" />
+          <input
+            type="password"
+            class="auth-page__form-input"
+            v-model.trim="verifyedPassword"
+          />
         </div>
         <div class="auth-page__form-container">
-          <input type="text" class="auth-page__form-input" />
+          <input type="text" class="auth-page__form-input" v-model="name" />
         </div>
         <div class="auth-page__form-buttons">
           <button type="submit" class="auth-page__btn btn success">Registration</button>
@@ -51,11 +59,19 @@ export default {
   data() {
     return {
       isLogin: true,
+      email: '',
+      password: '',
+      verifyedPassword: '',
+      name: '',
+      loginEmail: '',
+      loginPassword: '',
     };
   },
   methods: {
     login() {
-      this.$store.dispatch('getUser');
+      this.$store.dispatch('userStore/getUser', {
+        userData: { email: this.loginEmail, password: this.loginPassword },
+      });
       this.$store.dispatch('pushMessage', {
         type: 'SUCCESS',
         action: 'LOGIN',
@@ -63,8 +79,30 @@ export default {
       });
       this.$router.push('/');
     },
-    registration() {
-      console.log('registration');
+    async registration() {
+      if (this.password === this.verifyedPassword) {
+        const newUser = {
+          email: this.email,
+          name: this.name,
+          password: this.password,
+        };
+        try {
+          this.$store.dispatch('userStore/registration', { payload: newUser });
+          this.$store.dispatch('pushMessage', {
+            type: 'SUCCESS',
+            action: 'REGISTRATION',
+            id: Date.now(),
+          });
+        } catch (error) {
+          this.$store.dispatch('pushMessage', {
+            type: 'ERROR',
+            action: 'REGISTRATION',
+            id: Date.now(),
+          });
+        }
+      } else {
+        console.log('net');
+      }
     },
   },
 };
